@@ -15,14 +15,14 @@ const LoginForm = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const { signInWithEmail, signInWithGithub, user } = useAuth();
+  const { signInWithEmail, signInWithGithub, signUpWithEmail, user } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
     try {
-      const error = await signInWithEmail(email, password);
+      const error = emailSignUp ? await signUpWithEmail(email, password) : await signInWithEmail(email, password);
       if (error) {
         setError(error);
       }
@@ -65,7 +65,7 @@ const LoginForm = () => {
           <Separator /> <span className="mx-6">OR</span> <Separator />
         </div>
         <div className="flex items-center space-x-2">
-          <Switch id="email-signup-mode" checked={emailSignUp} onCheckedChange={(checked: boolean) => setEmailSignup(checked)}/>
+          <Switch id="email-signup-mode" checked={emailSignUp} onCheckedChange={(checked: boolean) => setEmailSignup(checked)} />
           <Label htmlFor="email-signup-mode">Email Signup/Login Toggle</Label>
         </div>
         {/* Form Container */}
@@ -92,7 +92,7 @@ const LoginForm = () => {
             type="submit"
             className="flex items-center w-full gap-2 mt-6"
           >
-            {emailSignUp ? "Signup with Email" :  "Login with Email"}
+            {emailSignUp ? "Signup with Email" : "Login with Email"}
             <Mail size="16" />
           </Button>
         </form>
