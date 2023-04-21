@@ -5,11 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/seperator";
+import { Switch } from "@/components/ui/switch";
 import { Github, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const LoginForm = () => {
+  const [emailSignUp, setEmailSignup] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
@@ -62,6 +64,10 @@ const LoginForm = () => {
         <div className="flex items-center my-8">
           <Separator /> <span className="mx-6">OR</span> <Separator />
         </div>
+        <div className="flex items-center space-x-2">
+          <Switch id="email-signup-mode" checked={emailSignUp} onCheckedChange={(checked: boolean) => setEmailSignup(checked)}/>
+          <Label htmlFor="email-signup-mode">Email Signup/Login Toggle</Label>
+        </div>
         {/* Form Container */}
         <form onSubmit={handleSubmit}>
           {/* Inputs Container */}
@@ -74,6 +80,7 @@ const LoginForm = () => {
               <Label>Password</Label>
               <Input
                 value={password}
+                type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
@@ -85,7 +92,7 @@ const LoginForm = () => {
             type="submit"
             className="flex items-center w-full gap-2 mt-6"
           >
-            Login with Email
+            {emailSignUp ? "Signup with Email" :  "Login with Email"}
             <Mail size="16" />
           </Button>
         </form>
