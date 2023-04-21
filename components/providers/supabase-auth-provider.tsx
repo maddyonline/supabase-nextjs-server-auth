@@ -14,15 +14,17 @@ interface ContextI {
   signOut: () => Promise<void>;
   signInWithGithub: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<string | null>;
+  signUpWithEmail: (email: string, password: string) => Promise<string | null>;
 }
 const Context = createContext<ContextI>({
   user: null,
   error: null,
   isLoading: true,
   mutate: null,
-  signOut: async () => {},
-  signInWithGithub: async () => {},
+  signOut: async () => { },
+  signInWithGithub: async () => { },
   signInWithEmail: async (email: string, password: string) => null,
+  signUpWithEmail: async (email: string, password: string) => null,
 });
 
 export default function SupabaseAuthProvider({
@@ -82,6 +84,20 @@ export default function SupabaseAuthProvider({
     return null;
   };
 
+  // Sign-Up with Email
+  const signUpWithEmail = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+
+    if (error) {
+      return error.message;
+    }
+
+    return null;
+  };
+
   // Refresh the Page to Sync Server and Client
   useEffect(() => {
     const {
@@ -105,6 +121,7 @@ export default function SupabaseAuthProvider({
     signOut,
     signInWithGithub,
     signInWithEmail,
+    signUpWithEmail,
   };
 
   return <Context.Provider value={exposed}>{children}</Context.Provider>;
